@@ -1,3 +1,23 @@
+//! This module defines a  `Slide` iterator over `Vector`s and slices
+
+/// Immutable iterator that returns both an element, and slice
+/// representing the remaining elements
+///
+/// This iterator will not return an empty slice upon reaching the
+/// last element, but will instead return a `None` instead of a
+/// `Some(&[..])`
+/// # Example
+/// ```
+/// use argparse::slide::{Slide, Slider};
+///
+/// let v = vec![1, 2, 3, 4, 5];
+///
+/// for (x, opt_rest) in v.slide() {
+///     if let Some(rest) = opt_rest {
+///         println!("{}", x + rest[0]) // rest guaranteed at least 1 element
+///     }
+/// }
+/// ```
 pub struct Slide<'a, T: 'a> {
     v: &'a [T],
     pos: usize,
@@ -27,7 +47,21 @@ impl<'a, T: Sized> Iterator for Slide<'a, T> {
     }
 }
 
+/// Interface for all types that can produce a `Slide` iterator
 pub trait Slider<'a, T: Sized> {
+    /// Calling this method shall produce a `Slide` iterator
+    /// # Example
+    /// ```
+    /// use argparse::slide::{Slide, Slider};
+    ///
+    /// let v = vec![1, 2, 3, 4, 5];
+    ///
+    /// for (x, opt_rest) in v.slide() {
+    ///     if let Some(rest) = opt_rest {
+    ///         println!("{}", x + rest[0]) // rest guaranteed at least 1 element
+    ///     }
+    /// }
+    /// ```
     fn slide(&'a self) -> Slide<'a, T>;
 }
 

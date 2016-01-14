@@ -1,9 +1,8 @@
-mod argparser;
-mod slide;
+extern crate argparse;
 
 use std::collections::HashMap;
 
-use argparser::{ArgParser, ArgType, hashmap_parser, vec_parser};
+use argparse::{ArgParser, ArgType, hashmap_parser, vec_parser};
 const LONG_STR: &'static str = r#"Check your proxy settings or contact your network administrator to make sure the proxy server is working. If you don't believe you should be using a proxy server: Go to the Chromium menu > Settings > Show advanced settings... > Change proxy settings... and make sure your configuration is set to "no proxy" or "direct.""#;
 
 fn main() {

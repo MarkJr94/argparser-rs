@@ -5,12 +5,20 @@ use std::str::FromStr;
 
 use slide::{Slider};
 
+/// This enum represents the different types of arguments supported
 #[derive(Debug, Clone, PartialEq)]
 pub enum ArgType {
+    /// An argument that takes a value, as in `./go --pic lol.jpg`
     Option,
+    /// An argument that is a simple flag, as in `rustc --version`
     Flag,
+    /// Like an `Option`, but takes multiple values, as in 
+    /// `./go --pics 1.png 2.png 3.png`
     List,
+    /// Like a `List` but takes colon-split key-value pairs, as in
+    /// `./go --pics Monday:1.jpg Tuesday:2.jpg`
     Dict,
+    /// A positional argument, as in `rustc lib.rs`
     Positional(u8),
 }
 
@@ -48,6 +56,8 @@ struct Arg {
 }
 
 #[derive(Debug, Clone)]
+/// This type represents the state and methods for parsing arguments.
+/// A new parser must be created for every set of arguments you want to parse.
 pub struct ArgParser {
     arguments: HashMap<String, Arg>,
     name: String,
@@ -56,6 +66,8 @@ pub struct ArgParser {
 }
 
 impl ArgParser {
+    /// Constructs a new `ArgParser`, given the name of the program
+    /// that you want to be printed in help messages
     pub fn new(name: String) -> ArgParser {
         let mut me = ArgParser {
             arguments: HashMap::new(),
@@ -70,7 +82,19 @@ impl ArgParser {
         me
     }
     
-    
+    /// Add another option to parse.
+    /// # Example
+    /// ```
+    /// // add an option that is a `Flag`, with no default value, with
+    /// // a long form of `--verbose`, short form of `v`, that is not
+    /// // required to be passed, and has a default value of `false`
+    ///
+    /// use argparse::{ArgParser, ArgType};
+    ///
+    /// let mut parser = ArgParser::new("runner".into());
+    /// parser.add_opt("verbose", Some("false"), 'v', false,
+    ///     "Whether to produce verbose output", ArgType::Flag);
+    /// ```
     pub fn add_opt(&mut self, name: &str, 
         default: Option<&str>, flag: char, required: bool, 
         help: &str, type_: ArgType) {
@@ -85,6 +109,25 @@ impl ArgParser {
         };
         
         self.arguments.insert(name.into(), o);
+    }
+    
+    /// Remove an option from parsing consideration.
+    /// # Example
+    /// ```
+    /// // add an option that is a `Flag`, with no default value, with
+    /// // a long form of `--verbose`, short form of `v`, that is not
+    /// // required to be passed, and has a default value of `false`
+    ///
+    /// use argparse::{ArgParser, ArgType};
+    ///
+    /// let mut parser = ArgParser::new("runner".into());
+    /// parser.add_opt("verbose", Some("false"), 'v', false,
+    ///     "Whether to produce verbose output", ArgType::Flag);
+    /// assert!(parser.remove_opt("verbose").is_ok())
+    /// ```
+    pub fn remove_opt(&mut self, name: &str) -> Result<(), &'static str> {
+        
+        self.arguments.remove(name).map(|_| ()).ok_or("No such Option")
     }
     
     pub fn parse<'a, I: Iterator<Item = &'a String>> (&mut self, args: I) {
