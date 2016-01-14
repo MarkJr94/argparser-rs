@@ -1,8 +1,7 @@
-use std::error;
-use std::fmt;
 use std::collections::HashMap;
-use std::str::FromStr;
+use std::fmt;
 use std::hash::{Hash};
+use std::str::FromStr;
 
 use slide::{Slider};
 
@@ -38,34 +37,9 @@ impl fmt::Display for ArgType {
     }
 }
 
-
 #[derive(Debug, Clone)]
-pub struct ArgParseError {
-    msg: String,
-}
-
-impl ArgParseError {
-    pub fn new(cause: String) -> ArgParseError {
-        ArgParseError { msg: cause }
-    }
-}
-
-impl fmt::Display for ArgParseError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", &self.msg[..])
-    }
-}
-        
-
-impl error::Error for ArgParseError {
-    fn description(&self) -> &str {
-        &self.msg[..]
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct Arg {
-    pub val: Option<String>,
+struct Arg {
+    val: Option<String>,
     count: u16,
     required: bool,
     flag: char,
@@ -75,7 +49,7 @@ pub struct Arg {
 
 #[derive(Debug, Clone)]
 pub struct ArgParser {
-    pub arguments: HashMap<String, Arg>,
+    arguments: HashMap<String, Arg>,
     name: String,
     argv: Vec<String>,
     done: bool,
@@ -89,7 +63,7 @@ impl ArgParser {
             done: false,
             argv: Vec::new(),
         };
-        
+
         me.add_opt("help", Some("false"), 'h', false, 
             "Show this help message", ArgType::Flag);
         
@@ -190,7 +164,20 @@ impl ArgParser {
         
         self.arguments = new_args;
         self.done = true;
+        self.p_args()
     }
+    
+    #[inline]
+    #[cfg(debug_assertions)]
+    fn p_args(&self) {
+        for (k, v) in self.arguments.iter() {
+            println!("{}:{:?}", k, v.val);
+        }
+    }
+    
+    #[inline]
+    #[cfg(not(debug_assertions))]
+    fn p_args(&self) {}
     
     pub fn get<T: FromStr>(&self, name: &str) -> Option<T> {        
         if !self.done {
@@ -349,9 +336,9 @@ pub fn vec_parser<T: FromStr>(s: &str) -> Option<Vec<T>> {
         })
 }
 
-pub fn hashmap_parser<K, V>(s: &str) -> Option<HashMap<K,V>> where
-K: FromStr + Hash + Eq,
-V: FromStr {
+pub fn hashmap_parser<K, V>(s: &str) -> Option<HashMap<K,V>> 
+    where K: FromStr + Hash + Eq,
+          V: FromStr {
     s.split_whitespace()
         .map(|x| {
             let colpos = x.find(':')
@@ -381,23 +368,6 @@ V: FromStr {
                 return None;
             }
         })
-}
-                
-
-pub fn print_series<I: Iterator>(mut it: I, sep: &str)
-where I::Item: fmt::Display{
-    print!("(");
-    
-    if let Some(first) = it.next() {
-        print!("{}", first);
-    }
-    
-    for x in it {
-        print!("{}", sep);
-        print!("{}", x);
-    }
-    
-    println!(")");
 }
 
 #[cfg(test)]

@@ -3,7 +3,7 @@ mod slide;
 
 use std::collections::HashMap;
 
-use argparser::{ArgParser, ArgType, hashmap_parser};
+use argparser::{ArgParser, ArgType, hashmap_parser, vec_parser};
 const LONG_STR: &'static str = r#"Check your proxy settings or contact your network administrator to make sure the proxy server is working. If you don't believe you should be using a proxy server: Go to the Chromium menu > Settings > Show advanced settings... > Change proxy settings... and make sure your configuration is set to "no proxy" or "direct.""#;
 
 fn main() {
@@ -25,20 +25,20 @@ fn main() {
     let test_1 = "./go -l -60 -h -6001.45e-2 -n Johnny -m -f 1 2 3 4 5 -s Monday:true Friday:false".split_whitespace()
         .map(|s| s.into())
         .collect::<Vec<String>>();
-                
-    argparser::print_series(test_1.iter(), ", ");
-    
-    parser.parse(test_1.iter());
-    
-    for (k, v) in parser.arguments.iter() {
-        println!("{}:{:?}", k, v.val);
-    }
 
+    parser.parse(test_1.iter());
+
+    let str_to_veci32 = |s: &str| {
+        Some(s.split_whitespace().map(|s| s.parse().unwrap())
+            .collect::<Vec<i32>>())
+    };
+    
     assert!(parser.get("length") == Some(-60));
     assert_eq!(parser.get("height"), Some(-6001.45e-2));
     assert_eq!(parser.get::<String>("name"), Some("Johnny".into()));
-    assert_eq!(parser.get_with("frequencies", |s: &str| Some(s.split_whitespace().map(|s| s.parse().unwrap())
-        .collect::<Vec<i32>>())), 
+    assert_eq!(parser.get_with("frequencies", str_to_veci32), 
+        Some(vec![1,2,3,4,5]));
+    assert_eq!(parser.get_with("frequencies", vec_parser), 
         Some(vec![1,2,3,4,5]));
     assert_eq!(parser.get("mao"), Some(true));
     

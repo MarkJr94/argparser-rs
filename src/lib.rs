@@ -1,6 +1,4 @@
-mod argparser;
+pub mod argparser;
 mod slide;
 
-#[test]
-fn it_works() {
-}
+pub use argparser::{ArgParser, ArgType, hashmap_parser, vec_parser};
