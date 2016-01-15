@@ -25,28 +25,28 @@ fn main() {
         .map(|s| s.into())
         .collect::<Vec<String>>();
 
-    parser.parse(test_1.iter());
+    let p_res = parser.parse(test_1.iter()).unwrap();
 
     let str_to_veci32 = |s: &str| {
         Some(s.split_whitespace().map(|s| s.parse().unwrap())
             .collect::<Vec<i32>>())
     };
     
-    assert!(parser.get("length") == Some(-60));
-    assert_eq!(parser.get("height"), Some(-6001.45e-2));
-    assert_eq!(parser.get::<String>("name"), Some("Johnny".into()));
-    assert_eq!(parser.get_with("frequencies", str_to_veci32), 
+    assert!(p_res.get("length") == Some(-60));
+    assert_eq!(p_res.get("height"), Some(-6001.45e-2));
+    assert_eq!(p_res.get::<String>("name"), Some("Johnny".into()));
+    assert_eq!(p_res.get_with("frequencies", str_to_veci32), 
         Some(vec![1,2,3,4,5]));
-    assert_eq!(parser.get_with("frequencies", vec_parser), 
+    assert_eq!(p_res.get_with("frequencies", vec_parser), 
         Some(vec![1,2,3,4,5]));
-    assert_eq!(parser.get("mao"), Some(true));
+    assert_eq!(p_res.get("mao"), Some(true));
     
     let h = [("Monday", true), ("Friday", false)]
         .iter()
         .map(|&(k, v)| (k.into(), v))
         .collect();
         
-    assert_eq!(parser.get_with::<HashMap<String, bool>, _>("socks", hashmap_parser),
+    assert_eq!(p_res.get_with::<HashMap<String, bool>, _>("socks", hashmap_parser),
         Some(h));
 
     parser.help();
