@@ -2,6 +2,9 @@
 name = "argparse"
 version = "0.1.0"
 authors = ["Mark Sinclair <mark.edward.x@gmail.com>"]
+
 repository = "https://github.com/MarkJr94/argparser-rs"
+documentation = "http://markjr94.github.io/argparser-rs/argparse/index.html"
+
 readme = "README.md"
 license = "MIT"
