@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["argparser","This module defines and contains all the important argument parsing functionality. The requisite types and functions are re-exported at the top-level of the crate."],["slide","This module defines a  `Slide` iterator over `Vector`s and slices"]]});

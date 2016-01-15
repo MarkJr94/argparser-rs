@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Slide","Immutable iterator that returns both an element, and slice representing the remaining elements"]],"trait":[["Slider","Interface for all types that can produce a `Slide` iterator"]]});
