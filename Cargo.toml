@@ -3,6 +3,7 @@ name = "argparse"
 version = "0.1.0"
 authors = ["Mark Sinclair <mark.edward.x@gmail.com>"]
 
+description = "A simple argument parser, meant to parse command line input. It is inspired by the Python ArgumentParser"
 repository = "https://github.com/MarkJr94/argparser-rs"
 documentation = "http://markjr94.github.io/argparser-rs/argparse/index.html"
 keywords = ["terminal", "argument", "parsing", "argparser"]
