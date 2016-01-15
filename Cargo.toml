@@ -1,5 +1,5 @@
 [package]
-name = "argparse"
+name = "argparse-rs"
 version = "0.1.0"
 authors = ["Mark Sinclair <mark.edward.x@gmail.com>"]
 
