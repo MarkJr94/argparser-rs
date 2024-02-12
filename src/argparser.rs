@@ -93,8 +93,8 @@ impl ArgParser {
         me
     }
 
-    /// set print args to true
-    pub fn set_print_args(&mut self, val: bool) {
+    /// if set true, the parser will print the arguments it has parsed
+    pub fn set_debug_print(&mut self, val: bool) {
         self.print_args = val;
     }
     
