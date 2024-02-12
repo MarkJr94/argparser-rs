@@ -69,6 +69,7 @@ pub struct ArgParser {
     arguments: HashMap<String, Arg>,
     name: String,
     done: bool,
+    print_args: bool,
 }
 
 /// Simple type alias to reduce typing. The return type of
@@ -83,12 +84,18 @@ impl ArgParser {
             arguments: HashMap::new(),
             name: name,
             done: false,
+            print_args: false,
         };
 
         me.add_opt("help", Some("false"), 'h', false, 
             "Show this help message", ArgType::Flag);
         
         me
+    }
+
+    /// set print args to true
+    pub fn set_print_args(&mut self, val: bool) {
+        self.print_args = val;
     }
     
     /// Add another option to parse.
@@ -241,7 +248,10 @@ impl ArgParser {
         }
         
         let res = ArgParseResults::new(self.name.clone(), new_args);
-        res.p_args();
+        
+        if self.print_args {
+            res.p_args();
+        }
         
         Ok(res)
     }
