@@ -17,11 +17,9 @@ Simple class to parse arguments. The Highlights are:
 Example use:
 
 ```rust
-extern crate argparse;
-
 use std::collections::HashMap;
 
-use argparse::{ArgParser, ArgType, hashmap_parser, vec_parser};
+use argparse_rs::{ArgParser, ArgType, hashmap_parser, vec_parser};
 const LONG_STR: &'static str = r#"Check your proxy settings or contact your network administrator to make sure the proxy server is working. If you don't believe you should be using a proxy server: Go to the Chromium menu > Settings > Show advanced settings... > Change proxy settings... and make sure your configuration is set to "no proxy" or "direct.""#;
 
 fn main() {
@@ -39,6 +37,7 @@ fn main() {
         "Is the User Chairman Mao?", ArgType::Flag);
     parser.add_opt("socks", None, 's', false,
         "If you wear socks that day", ArgType::Dict);
+    // paresr.set_debug_print(true); // This will print the arguments as they are parsed
     
     let test_1 = "./go -l -60 -h -6001.45e-2 -n Johnny -m -f 1 2 3 4 5 -s Monday:true Friday:false".split_whitespace()
         .map(|s| s.into())
@@ -75,13 +74,13 @@ fn main() {
 Terminal Output:
 
 ```
-socks:Some("Monday:true Friday:false ")
-length:Some("-60")
-frequencies:Some("1 2 3 4 5 ")
-height:Some("-6001.45e-2")
-help:Some("true")
-name:Some("Johnny")
-mao:Some("true")
+# socks:Some("Monday:true Friday:false ")
+# length:Some("-60")
+# frequencies:Some("1 2 3 4 5 ")
+# height:Some("-6001.45e-2")
+# help:Some("true")
+# name:Some("Johnny")
+# mao:Some("true")
 Usage:	./argparse [--socks k:v k2:v2...] [--length LENGTH] [--frequencies FREQUENCIES...] [--height HEIGHT] [--help ] [--name NAME] [--mao ] 
 Options:
 
