@@ -39,6 +39,7 @@ fn main() {
         "Is the User Chairman Mao?", ArgType::Flag);
     parser.add_opt("socks", None, 's', false,
         "If you wear socks that day", ArgType::Dict);
+    paresr.set_print_args(true); // This will print the arguments as they are parsed
     
     let test_1 = "./go -l -60 -h -6001.45e-2 -n Johnny -m -f 1 2 3 4 5 -s Monday:true Friday:false".split_whitespace()
         .map(|s| s.into())
